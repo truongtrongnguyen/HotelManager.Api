@@ -18,5 +18,7 @@ namespace HotelManager.Entities.DbSet
         public string? IdentityCard { get; set; }
         public DateTime DateCreate { get; set; } = DateTime.Now;
         public DateTime? DateUpdate { get; set; }
+        public bool IsEmployee { get; set; }
+        public bool IsCustomer { get; set; }
     }
 }
