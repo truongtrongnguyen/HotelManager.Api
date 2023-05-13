@@ -1,6 +1,8 @@
 ﻿using HotelManager.DataService.Data;
 using HotelManager.DataService.IRepository;
 using HotelManager.Entities.DbSet;
+using HotelManager.Entities.Dto.Incoming.Employ;
+using HotelManager.Entities.Dto.Incoming.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -17,5 +19,34 @@ namespace HotelManager.DataService.Repository
         {
             
         }
+
+
+        public async Task<bool> UpdateEmployee(UpdateEmployeeDto request)
+        {
+            try
+            {
+                var existing = await _dbSet.Where(x => x.IdentityId == request.Id).FirstOrDefaultAsync();
+
+                if (existing == null)
+                {
+                    return false;
+                }
+
+                existing.Position = request.Position;
+                existing.Allowvance = request.Allowvance;
+                existing.BankNumber = request.BankNumber;
+                existing.Salary = request.Salary;
+                existing.DateContact = request.DateContact;
+                existing.ContactTerm = request.ContactTerm;
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{typeof(EmployeeRepository)} UpdateEmployee method has a generated an error");
+                return false;
+            }
+        }
+
     }
 }

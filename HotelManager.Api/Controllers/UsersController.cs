@@ -3,6 +3,7 @@ using HotelManage.Authentication.Models.Incoming;
 using HotelManage.Authentication.Models.Outgoing;
 using HotelManager.DataService.IConfiguration;
 using HotelManager.Entities.DbSet;
+using HotelManager.Entities.Dto.Incoming.Employ;
 using HotelManager.Entities.Dto.Incoming.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -30,6 +31,56 @@ namespace HotelManager.Api.Controllers
         {
             var users = await _unitOfWork.Users.GetAll();
             return Ok(users);
+        }
+
+        [HttpPost("EditUser")]
+        public async Task<IActionResult> EditUser([FromForm]UpdateUserDto request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Invalid Payload");
+            }
+
+            var isUpdate = await _unitOfWork.Users.UpdateUser(request);
+
+            if (isUpdate)
+            {
+                await _unitOfWork.CompleteAsync();
+                return Ok(request);
+            }
+            return BadRequest("Something went wrong, please try again latter");
+        }
+
+        [HttpPut("EditEmployee")]
+        public async Task<IActionResult> EditEmployee([FromForm] UpdateEmployeeDto request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Invalid Payload");
+            }
+
+            var updateUserDto = new UpdateUserDto()
+            {
+                FullName =  request.FullName,
+                Sex = request.Sex,
+                BirthDay = request.BirthDay,
+                Address = request.Address,
+                Avata = request.Avata,
+                PhoneNumber = request.PhoneNumber,
+                IdentityCard = request.IdentityCard,
+                Id = request.Id
+            };
+
+            // Updating User and Employee are the same, we will use the same function UpdateUser
+            var isUpdateEmployee = await _unitOfWork.Users.UpdateUser(updateUserDto);
+            var isUpdateUser = await _unitOfWork.Employees.UpdateEmployee(request);
+
+            if (isUpdateEmployee && isUpdateUser)
+            {
+                await _unitOfWork.CompleteAsync();
+                return Ok(request);
+            }
+            return BadRequest("Something went wrong, please try again latter");
         }
 
         [HttpPost("Login")]

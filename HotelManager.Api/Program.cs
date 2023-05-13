@@ -1,10 +1,11 @@
-using HotelManage.Authentication.Configuration;
+﻿using HotelManage.Authentication.Configuration;
 using HotelManager.DataService.Data;
 using HotelManager.DataService.IConfiguration;
 using HotelManager.Entities.DbSet;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -67,6 +68,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+//CẤU HÌNH ĐƯỜNG DẪN LƯU FILE 
+app.UseStaticFiles(new StaticFileOptions()
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")),
+    RequestPath = "/Uploads"
+});
+
 
 app.UseHttpsRedirection();
 
