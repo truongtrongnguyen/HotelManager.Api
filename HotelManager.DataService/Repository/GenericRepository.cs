@@ -30,7 +30,7 @@ namespace HotelManager.DataService.Repository
             return true;
         }
 
-        public virtual async Task<bool> Delete(string id)
+        public virtual async Task<bool> Delete(int id)
         {
             throw new NotImplementedException();
         }
@@ -40,7 +40,7 @@ namespace HotelManager.DataService.Repository
             return await _dbSet.ToListAsync();
         }
 
-        public virtual async Task<T> GetById(string id)
+        public virtual async Task<T> GetById(int id)
         {
             return await _dbSet.FindAsync(id);
         }

@@ -4,6 +4,7 @@ using HotelManager.DataService.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelManager.DataService.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230513062243_AddUpdate")]
+    partial class AddUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -143,7 +145,7 @@ namespace HotelManager.DataService.Migrations
 
                     b.HasKey("IdentityId");
 
-                    b.ToTable("Employees", (string)null);
+                    b.ToTable("Employees");
                 });
 
             modelBuilder.Entity("HotelManager.Entities.DbSet.HotelDevice", b =>
@@ -165,7 +167,7 @@ namespace HotelManager.DataService.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("HotelDevices", (string)null);
+                    b.ToTable("HotelDevices");
                 });
 
             modelBuilder.Entity("HotelManager.Entities.DbSet.HotelService", b =>
@@ -190,7 +192,7 @@ namespace HotelManager.DataService.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("HotelService", (string)null);
+                    b.ToTable("HotelService");
                 });
 
             modelBuilder.Entity("HotelManager.Entities.DbSet.Photos", b =>
@@ -214,7 +216,7 @@ namespace HotelManager.DataService.Migrations
 
                     b.HasIndex("RoomId");
 
-                    b.ToTable("Photos", (string)null);
+                    b.ToTable("Photos");
                 });
 
             modelBuilder.Entity("HotelManager.Entities.DbSet.Room", b =>
@@ -251,7 +253,7 @@ namespace HotelManager.DataService.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Rooms", (string)null);
+                    b.ToTable("Rooms");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

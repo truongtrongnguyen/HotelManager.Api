@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HotelManager.Entities.DbSet
+namespace HotelManager.Entities.Dto.Incoming.HotelService
 {
-    public class HotelService
+    public class CreateHotelService
     {
-        public int Id { get; set; }
         public string? Title { get; set; }
         public string? Description { get; set; }
         public int? Quantity { get; set; }

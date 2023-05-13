@@ -17,14 +17,22 @@ namespace HotelManager.DataService.Data
 
         public IUserRepository Users { get; private set; }
         public IEmployeeRepository Employees { get; private set; }
+        public IHotelServiceRepository HotelServices { get; private set; }
+        public IHotelDeviceRepository HotelDevices { get; private set; }
+        public IRoomRepository Rooms { get; private set; }  
+        public IPhotosRepository Photos { get; private set; }
 
         public UnitOfWork(AppDbContext context, ILoggerFactory loggerFactory)
         {
             _context = context;
             _logger = loggerFactory.CreateLogger("db_logs");
 
-            Users = new UserRepository(context, _logger);
-            Employees = new EmployeeRepository(context, _logger);
+            Users = new UserRepository(_context, _logger);
+            Employees = new EmployeeRepository(_context, _logger);
+            HotelServices = new HotelServiceRepository(_context, _logger);
+            HotelDevices = new HotelDeviceRepository(_context, _logger);
+            Rooms = new RoomRepository(_context, _logger);
+            Photos = new PhotoRepository(_context, _logger);
         }
 
         public async Task CompleteAsync()

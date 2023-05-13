@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace HotelManager.Entities.DbSet
 {
-    public class HotelService
+    public class HotelDevice
     {
         public int Id { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public decimal Quantity { get; set; }
+        public string? Title { get; set; }
+        public string? Description { get; set; }
+        public int? Quantity { get; set; }
     }
 }

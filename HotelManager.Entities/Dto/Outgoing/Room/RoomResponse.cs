@@ -4,19 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HotelManager.Entities.DbSet
+namespace HotelManager.Entities.Dto.Outgoing.Room
 {
-    public class Room
+    public class RoomResponse
     {
-        public int Id { get; set; }
+        public RoomResponse()
+        {
+            Images = new List<ImageTemp>();
+        }
         public string? Name { get; set; }
         public float? Sizes { get; set; }
-        public DateTime DateCreate { get; set; } = DateTime.Now;
-        public DateTime? DateUpdate { get; set; }
         public decimal? Price { get; set; }
         public string? Desciption { get; set; }
         public string? Status { get; set; }
         public int? PeoplNumber { get; set; }
-        public List<Photos>? HotelPhotos { get; set; }
+        public List<ImageTemp> Images { get; set; }
     }
 }

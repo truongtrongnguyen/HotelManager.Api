@@ -4,14 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HotelManager.Entities.DbSet
+namespace HotelManager.Entities.Dto.Incoming.HotelDevice
 {
-    public class HotelService
+    public class CreateHotelDevice
     {
-        public int Id { get; set; }
         public string? Title { get; set; }
         public string? Description { get; set; }
         public int? Quantity { get; set; }
-        public decimal? Price { get; set; }
     }
 }

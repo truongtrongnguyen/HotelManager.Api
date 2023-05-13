@@ -14,5 +14,10 @@ namespace HotelManager.DataService.Data
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public virtual DbSet<Employee> Employees { get; set; }
+        public virtual DbSet<HotelDevice> HotelDevices { get; set; }
+        public virtual DbSet<HotelService> HotelService { get; set; }
+        public virtual DbSet<Photos> Photos { get; set; }
+        public virtual DbSet<Room> Rooms { get; set; }
+
     }
 }
