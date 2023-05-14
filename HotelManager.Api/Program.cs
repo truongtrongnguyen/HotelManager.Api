@@ -53,7 +53,8 @@ builder.Services.AddDefaultIdentity<AppUser>(option =>
     option.SignIn.RequireConfirmedAccount = true
 ).AddEntityFrameworkStores<AppDbContext>();
 
-
+// Add AutoMapper
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

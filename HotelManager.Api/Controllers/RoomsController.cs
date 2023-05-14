@@ -1,9 +1,13 @@
-﻿using HotelManage.Authentication.Models.Outgoing;
+﻿using AutoMapper;
+using HotelManage.Authentication.Models.Outgoing;
 using HotelManager.DataService.IConfiguration;
 using HotelManager.Entities.DbSet;
 using HotelManager.Entities.Dto.Incoming.HotelService;
 using HotelManager.Entities.Dto.Incoming.Photo;
 using HotelManager.Entities.Dto.Incoming.Room;
+using HotelManager.Entities.Dto.Outgoing.Generic;
+using HotelManager.Entities.Dto.Outgoing.Room;
+using HotelManager.Entities.Message;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,13 +16,15 @@ namespace HotelManager.Api.Controllers
     public class RoomsController : BaseController
     {
         public RoomsController(IUnitOfWork unitOfWork,
-                                UserManager<AppUser> userManager)
-                                : base(unitOfWork, userManager)
+                                UserManager<AppUser> userManager,
+                                IMapper _mapper
+                                )
+                                : base(unitOfWork, userManager, _mapper)
         {
         }
 
         [HttpGet("GetAllRooms")]
-        public async Task<IEnumerable<dynamic>> GetAllRooms()
+        public async Task<IEnumerable<RoomResponse>> GetAllRooms()
         {
             return await _unitOfWork.Rooms.GetAlll();
         }
@@ -26,6 +32,8 @@ namespace HotelManager.Api.Controllers
         [HttpPost("CreateRoom")]
         public async Task<IActionResult> CreateRoom([FromForm]CreateRoom request)
         {
+            var result = new Result<string>();
+
             if (ModelState.IsValid)
             {
                 var room = await _unitOfWork.Rooms.AddRoom(request);
@@ -40,34 +48,41 @@ namespace HotelManager.Api.Controllers
 
                             if (!success)
                             {
-                                BadRequest("Something went wrong, please try again latter ");
+                                result.Error = PopulateError(400,
+                                                 ErrorMessage.Generic.SomethingWentWrong,
+                                                 ErrorMessage.Generic.TypeBadRequest);
+                                return BadRequest(result);
                             }
                         }
                     }
 
                     await _unitOfWork.CompleteAsync();
 
-                    return Ok(request);
+                    result.Content = "Create Room Success";
+                    result.IsSuccess = true;
+
+                    return Ok(result);
                 }
 
-                return BadRequest("Something went wrong, please try again latter ");
+                result.Error = PopulateError(400,
+                                                 ErrorMessage.Generic.SomethingWentWrong,
+                                                 ErrorMessage.Generic.TypeBadRequest);
+                return BadRequest(result);
             }
             else
             {
-                return BadRequest(new AuthResult()
-                {
-                    Success = false,
-                    Errors = new List<string>()
-                    {
-                        "Invalid payload"
-                    }
-                });
+                result.Error = PopulateError(400,
+                                                 ErrorMessage.Generic.InvalidRequest,
+                                                 ErrorMessage.Generic.TypeBadRequest);
+                return BadRequest(result);
             }
         }
 
         [HttpPut("UpdateRoom")]
         public async Task<IActionResult> UpdateRoom(UpdateRoom request)
         {
+            var result = new Result<string>();
+
             if (ModelState.IsValid)
             {
                 var isCreate = await _unitOfWork.Rooms.UpdateRoom(request);
@@ -76,21 +91,23 @@ namespace HotelManager.Api.Controllers
                 {
                     await _unitOfWork.CompleteAsync();
 
-                    return Ok(request);
+                    result.Content = "Update Room Success";
+                    result.IsSuccess = true;
+
+                    return Ok(result);
                 }
 
-                return BadRequest("Something went wrong, please try again latter ");
+                result.Error = PopulateError(400,
+                                                 ErrorMessage.Generic.SomethingWentWrong,
+                                                 ErrorMessage.Generic.TypeBadRequest);
+                return BadRequest(result);
             }
             else
             {
-                return BadRequest(new AuthResult()
-                {
-                    Success = false,
-                    Errors = new List<string>()
-                    {
-                        "Invalid payload"
-                    }
-                });
+                result.Error = PopulateError(400,
+                                                 ErrorMessage.Generic.InvalidRequest,
+                                                 ErrorMessage.Generic.TypeBadRequest);
+                return BadRequest(result);
             }
         }
         
@@ -99,6 +116,8 @@ namespace HotelManager.Api.Controllers
         [HttpPut("AddImage")]
         public async Task<IActionResult> AddImage([FromForm] UpdatePhoto request)
         {
+            var result = new Result<string>();
+
             if (ModelState.IsValid)
             {
                 var isCreate = await _unitOfWork.Photos.UpdatePhotos(request);
@@ -107,27 +126,31 @@ namespace HotelManager.Api.Controllers
                 {
                     await _unitOfWork.CompleteAsync();
 
-                    return Ok(request);
+                    result.Content = "AddImage Room Success";
+                    result.IsSuccess = true;
+
+                    return Ok(result);
                 }
 
-                return BadRequest("Something went wrong, please try again latter ");
+                result.Error = PopulateError(400,
+                                                 ErrorMessage.Generic.SomethingWentWrong,
+                                                 ErrorMessage.Generic.TypeBadRequest);
+                return BadRequest(result);
             }
             else
             {
-                return BadRequest(new AuthResult()
-                {
-                    Success = false,
-                    Errors = new List<string>()
-                    {
-                        "Invalid payload"
-                    }
-                });
+                result.Error = PopulateError(400,
+                                                 ErrorMessage.Generic.InvalidRequest,
+                                                 ErrorMessage.Generic.TypeBadRequest);
+                return BadRequest(result);
             }
         }
 
         [HttpDelete("UpdatePhotoDelete")]
         public async Task<IActionResult> UpdatePhotoDelete(List<DeletePhotoRequest> request)
         {
+            var result = new Result<string>();
+
             if (ModelState.IsValid)
             {
                 var isCreate = await _unitOfWork.Photos.DeletePhotos(request);
@@ -136,27 +159,31 @@ namespace HotelManager.Api.Controllers
                 {
                     await _unitOfWork.CompleteAsync();
 
-                    return Ok(request);
+                    result.Content = "UpdatePhotoDelete Room Success";
+                    result.IsSuccess = true;
+
+                    return Ok(result);
                 }
 
-                return BadRequest("Something went wrong, please try again latter ");
+                result.Error = PopulateError(400,
+                                                 ErrorMessage.Generic.SomethingWentWrong,
+                                                 ErrorMessage.Generic.TypeBadRequest);
+                return BadRequest(result);
             }
             else
             {
-                return BadRequest(new AuthResult()
-                {
-                    Success = false,
-                    Errors = new List<string>()
-                    {
-                        "Invalid payload"
-                    }
-                });
+                result.Error = PopulateError(400,
+                                                 ErrorMessage.Generic.InvalidRequest,
+                                                 ErrorMessage.Generic.TypeBadRequest);
+                return BadRequest(result);
             }
         }
 
         [HttpDelete("DeleteRoom")]
         public async Task<IActionResult> DeleteRoom(int id)
         {
+            var result = new Result<string>();
+
             if (ModelState.IsValid)
             {
                 var isDelete = await _unitOfWork.Rooms.Delete(id);
@@ -165,21 +192,23 @@ namespace HotelManager.Api.Controllers
                 {
                     await _unitOfWork.CompleteAsync();
 
-                    return Ok();
+                    result.Content = "DeleteRoom Room Success";
+                    result.IsSuccess = true;
+
+                    return Ok(result);
                 }
 
-                return BadRequest("Something went wrong, please try again latter ");
+                result.Error = PopulateError(400,
+                                                 ErrorMessage.Generic.InvalidRequest,
+                                                 ErrorMessage.Generic.TypeBadRequest);
+                return BadRequest(result);
             }
             else
             {
-                return BadRequest(new AuthResult()
-                {
-                    Success = false,
-                    Errors = new List<string>()
-                    {
-                        "Invalid payload"
-                    }
-                });
+                result.Error = PopulateError(400,
+                                                 ErrorMessage.Generic.InvalidRequest,
+                                                 ErrorMessage.Generic.TypeBadRequest);
+                return BadRequest(result);
             }
         }
     }

@@ -1,10 +1,14 @@
-﻿using HotelManage.Authentication.Configuration;
+﻿using AutoMapper;
+using HotelManage.Authentication.Configuration;
 using HotelManage.Authentication.Models.Incoming;
 using HotelManage.Authentication.Models.Outgoing;
 using HotelManager.DataService.IConfiguration;
 using HotelManager.Entities.DbSet;
 using HotelManager.Entities.Dto.Incoming.Employ;
 using HotelManager.Entities.Dto.Incoming.User;
+using HotelManager.Entities.Dto.Outgoing.Generic;
+using HotelManager.Entities.Dto.Outgoing.UserDto;
+using HotelManager.Entities.Message;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -20,8 +24,9 @@ namespace HotelManager.Api.Controllers
         private readonly JwtConfig _jwtConfig;
         public UsersController(IUnitOfWork unitOfWork,
                                 UserManager<AppUser> userManager,
-                                IOptionsMonitor<JwtConfig> jwtConfig
-                                ) : base(unitOfWork, userManager)
+                                IOptionsMonitor<JwtConfig> jwtConfig,
+                                IMapper _mapper
+                                ) : base(unitOfWork, userManager, _mapper)
         {
             _jwtConfig = jwtConfig.CurrentValue;
         }
@@ -33,12 +38,73 @@ namespace HotelManager.Api.Controllers
             return Ok(users);
         }
 
+        [HttpGet("GetEmployeeByEmail")]
+        public async Task<IActionResult> GetEmployeeByEmail(string email)
+        {
+            var user = await _unitOfWork.Users.GetEmployeeByEmail(email);
+
+            var result = new Result<UserDto>();
+
+            if (user == null)
+            {
+                result.Error = PopulateError(400,
+                                           ErrorMessage.UserMessage.UserNotFound,
+                                           ErrorMessage.Generic.TypeBadRequest);
+                return BadRequest(result);
+            }
+
+            var employee = await _unitOfWork.Employees.GetEmployeeByEmail(user.Id);
+
+            if (employee == null)
+            {
+                result.Error = PopulateError(400,
+                                           ErrorMessage.UserMessage.UserNotFound,
+                                           ErrorMessage.Generic.TypeBadRequest);
+                return BadRequest(result);
+            }
+
+            var mapper = _mapper.Map<UserDto>(user);
+
+            result.Content = mapper;
+            result.IsSuccess = true;
+
+            return Ok(result);
+        }
+
+        [HttpGet("GetUserByEmail")]
+        public async Task<IActionResult> GetUserByEmail(string email)
+        {
+            var user = await _unitOfWork.Users.GetUserByEmail(email);
+
+            var result = new Result<UserDto>();
+
+            if (user == null)
+            {
+                result.Error = PopulateError(400,
+                                           ErrorMessage.UserMessage.UserNotFound,
+                                           ErrorMessage.Generic.TypeBadRequest);
+                return BadRequest(result);
+            }
+
+            var mapper = _mapper.Map<UserDto>(user);
+
+            result.Content = mapper;
+            result.IsSuccess = true;
+
+            return Ok(result);
+        }
+
         [HttpPost("EditUser")]
         public async Task<IActionResult> EditUser([FromForm]UpdateUserDto request)
         {
+            var result = new Result<UpdateUserDto>();
+
             if (!ModelState.IsValid)
             {
-                return BadRequest("Invalid Payload");
+                result.Error = PopulateError(400,
+                                                ErrorMessage.Generic.InvalidPayload,
+                                                ErrorMessage.Generic.TypeBadRequest);
+                return BadRequest(result);
             }
 
             var isUpdate = await _unitOfWork.Users.UpdateUser(request);
@@ -46,7 +112,9 @@ namespace HotelManager.Api.Controllers
             if (isUpdate)
             {
                 await _unitOfWork.CompleteAsync();
-                return Ok(request);
+                result.Content = request;
+                result.IsSuccess = true;
+                return Ok(result);
             }
             return BadRequest("Something went wrong, please try again latter");
         }

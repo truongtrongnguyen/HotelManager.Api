@@ -1,9 +1,12 @@
-﻿using HotelManage.Authentication.Models.Outgoing;
+﻿using AutoMapper;
+using HotelManage.Authentication.Models.Outgoing;
 using HotelManager.DataService.Data;
 using HotelManager.DataService.IConfiguration;
 using HotelManager.Entities.DbSet;
 using HotelManager.Entities.Dto.Incoming.HotelDevice;
 using HotelManager.Entities.Dto.Incoming.HotelService;
+using HotelManager.Entities.Dto.Outgoing.Generic;
+using HotelManager.Entities.Message;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,20 +15,27 @@ namespace HotelManager.Api.Controllers
     public class HotelDevicesController : BaseController
     {
         public HotelDevicesController(IUnitOfWork unitOfWork,
-                                UserManager<AppUser> userManager)
-                                : base(unitOfWork, userManager)
+                                UserManager<AppUser> userManager,
+                                IMapper _mapper
+                                )
+                                : base(unitOfWork, userManager, _mapper)
         {
         }
 
         [HttpGet("GetAllHotelDevices")]
-        public async Task<IEnumerable<HotelDevice>> GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            return await _unitOfWork.HotelDevices.GetAll();
+            var result = new Result<IEnumerable<HotelDevice>>();
+            result.IsSuccess = true;
+            result.Content = await _unitOfWork.HotelDevices.GetAll();
+            return Ok(result);
         }
 
         [HttpPost("CreateHotelDevice")]
         public async Task<IActionResult> CreateHotelDevice(CreateHotelDevice request)
         {
+            var result = new Result<CreateHotelDevice>();
+
             if (ModelState.IsValid)
             {
                 var hotelDevice = new HotelDevice()
@@ -41,27 +51,31 @@ namespace HotelManager.Api.Controllers
                 {
                     await _unitOfWork.CompleteAsync();
 
-                    return Ok(request);
+                    result.Content = request;
+                    result.IsSuccess = true;
+
+                    return Ok(result);
                 }
 
-                return BadRequest("Something went wrong, please try again latter ");
+                result.Error = PopulateError(400,
+                                                ErrorMessage.Generic.SomethingWentWrong,
+                                                ErrorMessage.Generic.TypeBadRequest);
+                return BadRequest(result);
             }
             else
             {
-                return BadRequest(new AuthResult()
-                {
-                    Success = false,
-                    Errors = new List<string>()
-                    {
-                        "Invalid payload"
-                    }
-                });
+                result.Error = PopulateError(400,
+                                                ErrorMessage.Generic.InvalidRequest,
+                                                ErrorMessage.Generic.TypeBadRequest);
+                return BadRequest(result);
             }
         }
 
         [HttpPut("UpdateHotelDevice")]
         public async Task<IActionResult> UpdateHoteDevice(HotelDevice request)
         {
+            var result = new Result<HotelDevice>();
+
             if (ModelState.IsValid)
             {
                 var isCreate = await _unitOfWork.HotelDevices.Update(request);
@@ -70,21 +84,23 @@ namespace HotelManager.Api.Controllers
                 {
                     await _unitOfWork.CompleteAsync();
 
-                    return Ok(request);
+                    result.Content = request;
+                    result.IsSuccess = true;
+
+                    return Ok(result);
                 }
 
-                return BadRequest("Something went wrong, please try again latter ");
+                result.Error = PopulateError(400,
+                                                 ErrorMessage.Generic.SomethingWentWrong,
+                                                 ErrorMessage.Generic.TypeBadRequest);
+                return BadRequest(result);
             }
             else
             {
-                return BadRequest(new AuthResult()
-                {
-                    Success = false,
-                    Errors = new List<string>()
-                    {
-                        "Invalid payload"
-                    }
-                });
+                result.Error = PopulateError(400,
+                                                ErrorMessage.Generic.InvalidRequest,
+                                                ErrorMessage.Generic.TypeBadRequest);
+                return BadRequest(result);
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using HotelManage.Authentication.Models.Outgoing;
+﻿using AutoMapper;
+using HotelManage.Authentication.Models.Outgoing;
 using HotelManager.DataService.Data;
 using HotelManager.DataService.IConfiguration;
 using HotelManager.Entities.DbSet;
@@ -11,8 +12,10 @@ namespace HotelManager.Api.Controllers
     public class HotelServicesController : BaseController
     {
         public HotelServicesController(IUnitOfWork unitOfWork,
-                                UserManager<AppUser> userManager)
-                                : base(unitOfWork, userManager)
+                                UserManager<AppUser> userManager,
+                                 IMapper _mapper
+                                )
+                                : base(unitOfWork, userManager, _mapper)
         {
         }
 

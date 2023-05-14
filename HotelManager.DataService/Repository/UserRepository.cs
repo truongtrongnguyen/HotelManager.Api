@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using HotelManager.Entities.Dto.Outgoing.UserDto;
 
 namespace HotelManager.DataService.Repository
 {
@@ -19,6 +20,49 @@ namespace HotelManager.DataService.Repository
         {
             
         }
+
+        public async Task<AppUser> GetEmployeeByEmail(string email)
+        {
+            try
+            {
+                var existing = await _dbSet.Where(x => x.Email == email && x.IsEmployee == true)
+                                            .AsNoTracking()
+                                            .FirstOrDefaultAsync();
+
+                if(existing != null)
+                {
+                    return existing;
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{typeof(UserRepository)} Method GetUserbyEmail has generated an error");
+                return null;
+            }
+        }
+
+        public async Task<AppUser> GetUserByEmail(string email)
+        {
+            try
+            {
+                var existing = await _dbSet.Where(x => x.Email == email && x.IsCustomer == true)
+                                            .AsNoTracking()
+                                            .FirstOrDefaultAsync();
+
+                if(existing != null)
+                {
+                    return existing;
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{typeof(UserRepository)} Method GetUserbyEmail has generated an error");
+                return null;
+            }
+        }
+
 
         public override async Task<IEnumerable<AppUser>> GetAll()
         {

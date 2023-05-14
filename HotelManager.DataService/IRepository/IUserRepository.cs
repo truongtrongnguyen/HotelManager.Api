@@ -11,5 +11,7 @@ namespace HotelManager.DataService.IRepository
     public interface IUserRepository : IGenericRepository<AppUser>
     {
         Task<bool> UpdateUser(UpdateUserDto request);
+        Task<AppUser> GetUserByEmail(string email);
+        Task<AppUser> GetEmployeeByEmail(string email);
     }
 }

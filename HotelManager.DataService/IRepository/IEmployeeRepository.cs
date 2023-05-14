@@ -12,5 +12,6 @@ namespace HotelManager.DataService.IRepository
     public interface IEmployeeRepository : IGenericRepository<Employee>
     {
         Task<bool> UpdateEmployee(UpdateEmployeeDto request);
+        Task<Employee> GetEmployeeByEmail(string id);
     }
 }

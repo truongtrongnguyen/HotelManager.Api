@@ -20,6 +20,27 @@ namespace HotelManager.DataService.Repository
             
         }
 
+        public async Task<Employee> GetEmployeeByEmail(string id)
+        {
+            try
+            {
+                var existing = await _dbSet.Where(x => x.IdentityId == id)
+                                            .AsNoTracking()
+                                            .FirstOrDefaultAsync();
+
+                if (existing != null)
+                {
+                    return existing;
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{typeof(EmployeeRepository)} Method GetEmployeeByEmail has generated an error");
+                return null;
+            }
+        }
+
 
         public async Task<bool> UpdateEmployee(UpdateEmployeeDto request)
         {
