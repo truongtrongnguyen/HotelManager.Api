@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HotelManage.Authentication.Models.Outgoing
+namespace HotelManage.Authentication.Models.Dto.Outgoing
 {
-    public class EmployeeRegistrantionResponse : AuthResult
+    public class UserLogInResponse : AuthResult
     {
-
     }
 }

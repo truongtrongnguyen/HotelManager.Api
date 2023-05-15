@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using HotelManage.Authentication.Models.Outgoing;
+using HotelManage.Authentication.Models.Dto.Outgoing;
 using HotelManager.DataService.Data;
 using HotelManager.DataService.IConfiguration;
 using HotelManager.Entities.DbSet;

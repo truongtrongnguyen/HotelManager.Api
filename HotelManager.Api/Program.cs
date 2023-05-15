@@ -25,6 +25,20 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection("JwtConfig"));
 
 // Add Jwt
+var key = Encoding.UTF8.GetBytes(builder.Configuration["JwtConfig:Secret"]);
+
+var tokenValidationParameter = new TokenValidationParameters()
+{
+    ValidateIssuerSigningKey = true,
+    IssuerSigningKey = new SymmetricSecurityKey(key),
+    ValidateIssuer = false,
+    ValidateAudience = false,
+    RequireAudience = false,
+    ValidateLifetime = true
+};
+
+builder.Services.AddSingleton(tokenValidationParameter);
+
 builder.Services.AddAuthentication(option =>
 {
     option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -33,19 +47,9 @@ builder.Services.AddAuthentication(option =>
 })
 .AddJwtBearer(jwt =>
 {
-    var key = Encoding.UTF8.GetBytes(builder.Configuration["JwtConfig:Secret"]);
-
     jwt.SaveToken = true;
 
-    jwt.TokenValidationParameters = new TokenValidationParameters()
-    {
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(key),
-        ValidateIssuer  = false,
-        ValidateAudience = false,
-        RequireAudience =false,
-        ValidateLifetime = true
-    };
+    jwt.TokenValidationParameters = tokenValidationParameter;
 });
 
 // Microsoft.AspNetCore.Identity.UI
@@ -81,6 +85,7 @@ app.UseStaticFiles(new StaticFileOptions()
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

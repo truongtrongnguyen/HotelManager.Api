@@ -20,6 +20,7 @@ namespace HotelManager.DataService.Data
         public virtual DbSet<Room> Rooms { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
+        public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

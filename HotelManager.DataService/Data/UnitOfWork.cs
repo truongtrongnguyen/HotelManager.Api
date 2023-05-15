@@ -22,6 +22,7 @@ namespace HotelManager.DataService.Data
         public IRoomRepository Rooms { get; private set; }  
         public IPhotosRepository Photos { get; private set; }
         public IOrderRepository Orders { get; private set; }
+        public IRefreshTokenRepository RefreshTokens { get; private set; }
 
         public UnitOfWork(AppDbContext context, ILoggerFactory loggerFactory)
         {
@@ -35,6 +36,7 @@ namespace HotelManager.DataService.Data
             Rooms = new RoomRepository(_context, _logger);
             Photos = new PhotoRepository(_context, _logger);
             Orders = new OrderRepository(_context, _logger);
+            RefreshTokens = new RefreshTokenRepository(_context, _logger);
         }
 
         public async Task CompleteAsync()

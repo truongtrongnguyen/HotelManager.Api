@@ -22,6 +22,7 @@ namespace HotelManager.Entities.DbSet
         public string? Sex { get; set; }
         public DateTime? CheckIn { get; set; }
         public DateTime? CheckOut { get; set; }
+        public DateTime? DateUpdate { get; set; }
         public string? Status { get; set; }
         public List<OrderDetail>? OrderDetails { get; set; }
     }
