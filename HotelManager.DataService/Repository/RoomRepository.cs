@@ -38,7 +38,10 @@ namespace HotelManager.DataService.Repository
                         Desciption = room.Desciption,
                         Price = room.Price,
                         PeoplNumber = room.PeoplNumber, 
-                        Status = room.Status
+                        Status = room.Status,
+                        PriceByDay = room.PriceByDay,
+                        PriceByHour = room.PriceByHour,
+                        PriceByMonth = room.PriceByMonth,
                     };
                     room.HotelPhotos.ForEach(x => temp.Images.Add(new ImageTemp() { Id = x.Id, ImageUrl = x.PhotoName }));
                     result.Add(temp);
@@ -63,7 +66,10 @@ namespace HotelManager.DataService.Repository
                     Desciption = request.Desciption,
                     Price = request.Price,
                     PeoplNumber = request.PeoplNumber,
-                    Status = request.Status
+                    Status = request.Status,
+                    PriceByDay = request.PriceByDay,
+                    PriceByHour = request.PriceByHour,
+                    PriceByMonth = request.PriceByMonth,
                 };
 
                 await _dbSet.AddAsync(room);
@@ -103,6 +109,9 @@ namespace HotelManager.DataService.Repository
                 existing.Price = room.Price;
                 existing.Sizes = room.Sizes;
                 existing.PeoplNumber = room.PeoplNumber;
+                existing.PriceByDay = room.PriceByDay;
+                existing.PriceByHour = room.PriceByHour;
+                existing.PriceByMonth = room.PriceByMonth;
 
                 return true;
             }

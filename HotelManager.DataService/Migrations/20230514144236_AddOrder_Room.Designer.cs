@@ -4,6 +4,7 @@ using HotelManager.DataService.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelManager.DataService.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230514144236_AddOrder_Room")]
+    partial class AddOrder_Room
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -237,8 +239,14 @@ namespace HotelManager.DataService.Migrations
                     b.Property<string>("Sex")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("StayByDay")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("StayByHour")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("StayByMonth")
+                        .HasColumnType("bit");
 
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("decimal(18,2)");

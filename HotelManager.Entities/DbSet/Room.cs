@@ -17,6 +17,9 @@ namespace HotelManager.Entities.DbSet
         public string? Desciption { get; set; }
         public string? Status { get; set; }
         public int? PeoplNumber { get; set; }
+        public decimal PriceByHour { get; set; }
+        public decimal PriceByDay { get; set; }
+        public decimal PriceByMonth { get; set; }
         public List<Photos>? HotelPhotos { get; set; }
     }
 }

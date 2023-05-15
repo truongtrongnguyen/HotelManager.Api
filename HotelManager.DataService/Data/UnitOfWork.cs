@@ -21,6 +21,7 @@ namespace HotelManager.DataService.Data
         public IHotelDeviceRepository HotelDevices { get; private set; }
         public IRoomRepository Rooms { get; private set; }  
         public IPhotosRepository Photos { get; private set; }
+        public IOrderRepository Orders { get; private set; }
 
         public UnitOfWork(AppDbContext context, ILoggerFactory loggerFactory)
         {
@@ -33,6 +34,7 @@ namespace HotelManager.DataService.Data
             HotelDevices = new HotelDeviceRepository(_context, _logger);
             Rooms = new RoomRepository(_context, _logger);
             Photos = new PhotoRepository(_context, _logger);
+            Orders = new OrderRepository(_context, _logger);
         }
 
         public async Task CompleteAsync()

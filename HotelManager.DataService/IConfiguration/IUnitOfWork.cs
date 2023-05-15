@@ -15,7 +15,7 @@ namespace HotelManager.DataService.IConfiguration
         IHotelDeviceRepository HotelDevices { get; }
         IRoomRepository Rooms { get; }
         IPhotosRepository Photos { get; }
-
+        IOrderRepository Orders { get; }
         Task CompleteAsync();
     }
 }

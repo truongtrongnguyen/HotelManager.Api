@@ -16,5 +16,8 @@ namespace HotelManager.Entities.Dto.Incoming.Room
         public string? Status { get; set; }
         public int? PeoplNumber { get; set; }
         public List<IFormFile>? Photos { get; set; }
+        public decimal PriceByHour { get; set; }
+        public decimal PriceByDay { get; set; }
+        public decimal PriceByMonth { get; set; }
     }
 }
