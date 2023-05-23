@@ -24,6 +24,9 @@ namespace HotelManager.DataService.Data
         public IOrderRepository Orders { get; private set; }
         public IRefreshTokenRepository RefreshTokens { get; private set; }
 
+        // Dapper
+        public IDapperRoomRepository DapperRooms { get; private set; }
+
         public UnitOfWork(AppDbContext context, ILoggerFactory loggerFactory)
         {
             _context = context;
@@ -37,6 +40,9 @@ namespace HotelManager.DataService.Data
             Photos = new PhotoRepository(_context, _logger);
             Orders = new OrderRepository(_context, _logger);
             RefreshTokens = new RefreshTokenRepository(_context, _logger);
+
+            // Dapper
+            DapperRooms = new DapperRoomRepository(_logger);
         }
 
         public async Task CompleteAsync()

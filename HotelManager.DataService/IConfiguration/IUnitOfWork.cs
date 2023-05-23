@@ -17,6 +17,9 @@ namespace HotelManager.DataService.IConfiguration
         IPhotosRepository Photos { get; }
         IOrderRepository Orders { get; }
         IRefreshTokenRepository RefreshTokens { get; }
+        
+        // Dapper
+        IDapperRoomRepository DapperRooms { get; }
         Task CompleteAsync();
     }
 }

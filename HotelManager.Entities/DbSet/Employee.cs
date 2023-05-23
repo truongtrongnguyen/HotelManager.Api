@@ -17,5 +17,6 @@ namespace HotelManager.Entities.DbSet
         public DateTime? ContactTerm { get; set; }
         [Key]
         public string IdentityId { get; set; }
+        public AppUser AppUser { get; set; }
     }
 }

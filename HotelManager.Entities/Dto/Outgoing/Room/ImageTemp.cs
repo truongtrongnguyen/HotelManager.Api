@@ -8,7 +8,7 @@ namespace HotelManager.Entities.Dto.Outgoing.Room
 {
     public class ImageTemp
     {
-        public string ImageUrl { get; set; }
+        public string PhotoName { get; set; }
         public int Id { get; set; }
     }
 }

@@ -21,37 +21,37 @@ namespace HotelManager.DataService.Repository
 
         }
 
-        public async Task<IEnumerable<RoomResponse>> GetAlll()
+        public async Task<IEnumerable<Room>> GetAlll()
         {
             try
             {
                 var rooms = await _dbSet.Include(x => x.HotelPhotos)
                                     .AsNoTracking().ToListAsync();
 
-                var result = new List<RoomResponse>();
-                foreach(var room in rooms)
-                {
-                    var temp = new RoomResponse()
-                    {
-                        Name = room.Name,
-                        Sizes = room.Sizes,
-                        Desciption = room.Desciption,
-                        Price = room.Price,
-                        PeoplNumber = room.PeoplNumber, 
-                        Status = room.Status,
-                        PriceByDay = room.PriceByDay,
-                        PriceByHour = room.PriceByHour,
-                        PriceByMonth = room.PriceByMonth,
-                    };
-                    room.HotelPhotos.ForEach(x => temp.Images.Add(new ImageTemp() { Id = x.Id, ImageUrl = x.PhotoName }));
-                    result.Add(temp);
-                }
-                return result;
+                //var result = new List<RoomResponse>();
+                //foreach(var room in rooms)
+                //{
+                //    var temp = new RoomResponse()
+                //    {
+                //        Name = room.Name,
+                //        Sizes = room.Sizes,
+                //        Desciption = room.Desciption,
+                //        Price = room.Price,
+                //        PeoplNumber = room.PeoplNumber, 
+                //        Status = room.Status,
+                //        PriceByDay = room.PriceByDay,
+                //        PriceByHour = room.PriceByHour,
+                //        PriceByMonth = room.PriceByMonth,
+                //    };
+                //    room.HotelPhotos.ForEach(x => temp.Images.Add(new ImageTemp() { Id = x.Id, PhotoName = x.PhotoName }));
+                //    result.Add(temp);
+                //}
+                return rooms;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"{typeof(RoomRepository)} GetAll Method has generated an error");
-                return new List<RoomResponse>();
+                return new List<Room>();
             }
         }
 

@@ -23,7 +23,7 @@ namespace HotelManager.Api.Controllers
         }
 
         [HttpGet("GetAllRooms")]
-        public async Task<IEnumerable<RoomResponse>> GetAllRooms()
+        public async Task<IEnumerable<Room>> GetAllRooms()
         {
             return await _unitOfWork.Rooms.GetAlll();
         }
